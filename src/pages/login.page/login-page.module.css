@@ -1,0 +1,13 @@
+.loginForm {
+    max-width: 300px;
+    margin: 200px auto !important;
+}
+
+.loginFormForgot {
+    float: left;
+}
+
+.loginFormButton {
+    width: 100%;
+}
+

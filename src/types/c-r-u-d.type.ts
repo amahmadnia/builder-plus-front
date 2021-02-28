@@ -1,0 +1,1 @@
+export type CRUDType = 'one' | 'list' | 'edit' | 'delete' | 'new';

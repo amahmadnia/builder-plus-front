@@ -1,0 +1,1 @@
+export {default as ProjectTeamFormTablePage} from './project-team-form-table.page';

@@ -1,0 +1,17 @@
+.hidden {
+    display: none !important;
+}
+
+.table-link {
+    display: block;
+}
+
+.pointer {
+    cursor: pointer;
+}
+
+.bright {
+    color: white !important;
+}
+
+
