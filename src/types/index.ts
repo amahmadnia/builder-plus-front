@@ -10,6 +10,14 @@ export * from './c-r-u-d.type';
 export * from './project-team.type';
 export * from './project.type';
 export * from './baseline.type';
+export * from './attendance.type';
+export * from './calendar.type';
+export * from './calendar-object.type';
+export * from './calendar-weekday-hour.type';
+export * from './feature.type';
+export * from './user-type.type';
+export * from './user-type-action.type';
+
 
 //export reducers types
 export * from './root-state.type';

@@ -1,0 +1,108 @@
+$user-type-background: whitesmoke;
+$size: 17;
+$semicircular-size: $size + px;
+$semicircular-length: ($size * 2) + px;
+
+.user-type--header {
+  background-color: white !important;
+  color: #333333 !important;
+}
+
+.user-type--sider {
+  margin-left: 60px;
+}
+
+.user-type--menu {
+  background-color: rgba(10, 20, 30, .4) !important;
+  padding-top: 24px;
+  padding-bottom: 24px;
+
+  & .ant-menu-item-selected {
+    background-color: $user-type-background !important;
+    color: black;
+    font-weight: bold;
+    width: 310px;
+    overflow: visible;
+  }
+
+  & .ant-menu-item {
+    transition: all .5s;
+  }
+
+  & .ant-menu-item::after {
+    border: none;
+  }
+
+}
+
+
+.user-type--menu .ant-menu-item {
+  & .user-type--top-left, & .user-type--bottom-left {
+    width: $semicircular-length;
+    height: $semicircular-length;
+    overflow: hidden;
+    position: absolute;
+    left: 0;
+    display: none;
+    transition: all .5s step-end;
+
+  }
+
+  & .user-type--top-left:before, & .user-type--bottom-left:before {
+    content: "";
+    display: block;
+    width: 200%;
+    height: 200%;
+    position: absolute;
+    border-radius: 50%;
+    transition: all .5s step-end;
+  }
+}
+
+.user-type--menu .ant-menu-item-selected {
+  .user-type--top-left {
+    transform: translateY(-100%);
+    display: block;
+  }
+
+  .user-type--bottom-left {
+    display: block;
+  }
+
+  & .user-type--top-left:before {
+    bottom: 0;
+    left: 0;
+    box-shadow: (-$semicircular-size) $semicircular-size 0 0 $user-type-background;
+
+  }
+
+  & .user-type--bottom-left:before {
+    top: 0;
+    left: 0;
+    box-shadow: (-$semicircular-size) (-$semicircular-size) 0 0 $user-type-background;
+
+  }
+
+}
+
+
+.user-type--content {
+  background-color: $user-type-background;
+  padding: 24px
+}
+
+.user-type-collapse-group {
+  display: flex;
+  justify-content: center;
+  padding: 10px;
+  border: 1px solid rgb(217, 217, 217);
+  margin: 5px;
+  border-radius: 4px;
+  background-color: rgba(10, 10, 10, .1);
+}
+
+
+.user-type-section__radio-group {
+  display: flex;
+  justify-content: space-around;
+}

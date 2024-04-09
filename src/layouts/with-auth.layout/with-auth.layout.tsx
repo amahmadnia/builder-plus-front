@@ -85,6 +85,12 @@ function WithAuth({children, grade, logout, user, project, projects, projectActi
                             خط مبنا
                         </Link>
                     </Menu.Item>
+
+                    <Menu.Item key={'user-type'} icon={<AntIcon.BlockOutlined/>} disabled={!project}>
+                        <Link to={'/user-type'}>
+                            سمت شغلی
+                        </Link>
+                    </Menu.Item>
                 </Menu>
                 <div className={styles.siderFooter}>
 

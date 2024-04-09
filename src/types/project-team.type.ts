@@ -5,5 +5,6 @@ export type ProjectTeamType = {
     national_id: string;
     phone_no: string;
     address: string;
+    project: number;
     post: "personnel" | "daily worker" | "contractor";
 }

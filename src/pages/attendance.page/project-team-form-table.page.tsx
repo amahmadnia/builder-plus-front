@@ -1,14 +1,16 @@
 import React, {Component} from "react";
 import {connector, PropType} from './connector'
-import {ProjectTeamEditableCell, Item, ProjectTeamEditableCellProps} from './project-team-editable.cell';
+import {ProjectTeamEditableCell, Item, AttendanceEditableCellProps} from './project-team-editable.cell';
 import Form, {FormInstance} from 'antd/lib/form';
 import Table, {ColumnType, ColumnGroupType} from 'antd/lib/table';
 import {persian} from "src/lib";
-import {ProjectTeamType} from "src/types";
+import {ProjectTeamType, AttendanceType} from "src/types";
 import {Button, Input, Popconfirm, Select, Space} from "antd";
+import {DatePicker, TimePicker} from 'antd-jalali';
 import {DeleteOutlined, CheckOutlined, CloseOutlined, PlusOutlined} from "@ant-design/icons";
+import dayjs, {Dayjs} from 'dayjs';
 
-type ProjectTeamColumnsType = (Partial<ProjectTeamEditableCellProps> & (ColumnGroupType<Item> | ColumnType<Item>))
+type ProjectTeamColumnsType = (Partial<AttendanceEditableCellProps> & (ColumnGroupType<Item> | ColumnType<Item>))
 
 enum Posts {
     personnel = "پرسنل",
@@ -17,8 +19,8 @@ enum Posts {
 }
 
 
-class ProjectTeamFormTablePage extends Component<PropType, { edit?: number, new: boolean }> {
-    state = {edit: undefined, new: false}
+class ProjectTeamFormTablePage extends Component<PropType, { edit?: number, new: boolean, post?: ProjectTeamType['post'] }> {
+    state = {edit: undefined, new: false, post: undefined};
     form = React.createRef<FormInstance>();
     columns: ProjectTeamColumnsType[] = [
         {
@@ -29,60 +31,11 @@ class ProjectTeamFormTablePage extends Component<PropType, { edit?: number, new:
             editable: false,
         },
         {
-            title: 'نام',
-            dataIndex: 'first_name',
-            key: 'first_name',
-            align: 'center',
-            editable: true,
-            InputNode: <Input placeholder={"نام"} className={'persian'}/>,
-            formItemProps: {rules: [{required: true, message: ''}]},
-        },
-        {
-            title: 'نام خانوادگی',
-            dataIndex: 'last_name',
-            key: 'last_name',
-            align: 'center',
-            editable: true,
-            placeholder: 'نام خانوادگی',
-            InputNode: <Input placeholder={'نام خانوادگی'} className={'persian'}/>,
-            formItemProps: {rules: [{required: true, message: ''}]},
-        },
-        {
-            title: 'شماره ملی',
-            dataIndex: 'national_id',
-            key: 'national_id',
-            align: 'center',
-            editable: true,
-            render: (national_id) => persian(national_id),
-            InputNode: <Input placeholder={"شماره ملی"} className={'persian'}/>,
-            formItemProps: {rules: [{required: true, message: ''}]},
-        },
-        {
-            title: 'شماره موبایل',
-            dataIndex: 'phone_no',
-            key: 'phone_no',
-            align: 'center',
-            editable: true,
-            render: (national_id) => persian(national_id),
-            InputNode: <Input placeholder={"شماره موبایل"} className={'persian'}/>,
-            formItemProps: {rules: [{required: true, message: ''}]},
-        },
-        {
-            title: 'آدرس',
-            dataIndex: 'address',
-            key: 'address',
-            align: 'center',
-            editable: true,
-            InputNode: <Input placeholder={"آدرس"} className={'persian'}/>,
-            formItemProps: {rules: [{required: true, message: ''}]},
-        },
-        {
             title: 'سمت',
-            dataIndex: 'post',
+            dataIndex: 'member',
             key: 'post',
             align: 'center',
             editable: true,
-            render: (post) => Posts[post as ProjectTeamType['post']],
             InputNode: <Select options={
                 [
                     {label: 'پرسنل', value: 'personnel'},
@@ -90,8 +43,66 @@ class ProjectTeamFormTablePage extends Component<PropType, { edit?: number, new:
                     {label: 'کارگر روزمزد', value: 'daily worker'}
                 ]
             }
+                               onSelect={(value) => {
+                                   this.setState({post: (value as ProjectTeamType['post'])})
+                               }}
                                placeholder={'سمت'}
             />,
+            formItemProps: {rules: [{required: true, message: ''}]},
+        },
+        {
+            title: 'نام',
+            dataIndex: 'member',
+            key: 'full_name',
+            align: 'center',
+            editable: true,
+            InputNode: () => <Select
+                options={this.props.team?.data?.filter((member) => member.post === this.state.post).map(member => ({
+                    label: `${member.first_name} ${member.last_name}`,
+                    value: member.id,
+                }))}
+                placeholder={'نام'}
+            />,
+            formItemProps: {rules: [{required: true, message: ''}]},
+        },
+        {
+            title: 'تاریخ',
+            dataIndex: 'date',
+            key: 'date',
+            align: 'center',
+            editable: true,
+            placeholder: 'تاریخ',
+            render: (date) => persian(dayjs(date, 'YYYY-MM-DD').format('YYYY/MM/DD')),
+            InputNode: <DatePicker style={{width: '100%'}} placeholder={'انتخاب تاریخ'} className="persian"/>,
+            formItemProps: {rules: [{required: true, message: ''}]},
+        },
+        {
+            title: 'ساعت ورود',
+            dataIndex: 'entry_time',
+            key: 'entry_time',
+            align: 'center',
+            editable: true,
+            render: (entry_time) => persian(dayjs(entry_time, 'HH:MM').format('HH:mm')),
+            InputNode: <Input placeholder={"ساعت ورود"} className={'persian'}/>,
+            formItemProps: {rules: [{required: true, message: ''}]},
+        },
+        {
+            title: 'ساعت خروج',
+            dataIndex: 'exit_time',
+            key: 'exit_time',
+            align: 'center',
+            editable: true,
+            render: (exit_time) => persian(dayjs(exit_time, 'HH:MM').format('HH:mm')),
+            InputNode: <Input placeholder={"ساعت خروج"} className={'persian'}/>,
+            formItemProps: {rules: [{required: true, message: ''}]},
+        },
+        {
+            title: 'توضیحات',
+            dataIndex: 'description',
+            key: 'description',
+            align: 'center',
+            editable: true,
+            InputNode: <Input placeholder={"توضیحات"} className={'persian'}/>,
             formItemProps: {rules: [{required: true, message: ''}]},
         },
         {
@@ -137,20 +148,21 @@ class ProjectTeamFormTablePage extends Component<PropType, { edit?: number, new:
     ]
 
     componentDidMount() {
+        this.props.attendance({type: 'list'});
         this.props.project_team({type: 'list'});
     }
 
     componentDidUpdate(prevProps: Readonly<PropType>) {
         if (prevProps.POST?.status === 'loading' && this.props.POST!.status === 'ok') {
 
-            this.props.set_data('project_team', 'LIST', [this.props.POST!.data, ...this.props.LIST!.data!])
+            this.props.set_data('attendance', 'LIST', [this.props.POST!.data, ...this.props.LIST!.data!])
             this.cancel()
         }
         if (prevProps.PATCH?.status === 'loading' && this.props.PATCH!.status === 'ok') {
             const data = [...this.props.LIST!.data!];
-            const index = data.findIndex(person => person.id === this.props.PATCH!.data!.id);
+            const index = data.findIndex(attend => attend.id === this.props.PATCH!.data!.id);
             data[index] = this.props.PATCH!.data!;
-            this.props.set_data('project_team', 'LIST', data)
+            this.props.set_data('attendance', 'LIST', data)
             this.cancel()
         }
     }
@@ -181,12 +193,12 @@ class ProjectTeamFormTablePage extends Component<PropType, { edit?: number, new:
 
     finish(values: Item) {
         if (values.id !== undefined)
-            this.props.project_team({id: values.id, type: 'edit', data: values});
+            this.props.attendance({id: values.id, type: 'edit', data: values});
         else
-            this.props.project_team({type: 'new', data: values});
+            this.props.attendance({type: 'new', data: values});
     }
 
-    onCell(col: ProjectTeamColumnsType, record: Item, index: number): ProjectTeamEditableCellProps {
+    onCell(col: ProjectTeamColumnsType, record: Item, index: number): AttendanceEditableCellProps {
 
         return {
             dataIndex: col.dataIndex as string,

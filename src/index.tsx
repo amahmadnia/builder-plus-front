@@ -11,6 +11,7 @@ import fa_IR from 'antd/lib/locale-provider/fa_IR';
 
 import 'antd/dist/antd.css';
 import './styles/index.css';
+import './styles/index.scss';
 import dayjs from "dayjs";
 
 const jalali = require('jalaliday');

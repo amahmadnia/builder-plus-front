@@ -6,6 +6,8 @@ import LoginPage from "./login.page/login.page";
 import {NotFoundPage, NotPermissionModalPage, NotPermissionPage} from "./error.page";
 import {ProjectTeamFormTablePage} from "./project-team.page";
 import {BaselineTablePage, BaselineNewPage, BaselineEditPage, BaselineViewPage} from "./baseline.page";
+import {AttendanceViewAndEdit} from "./attendance.page";
+import {UserTypePage} from "./user-type.page";
 
 
 const redirectTo = (grade: string) => {
@@ -36,7 +38,9 @@ const Pages: React.FC<ConnectorType> = (props: ConnectorType) => {
 
                 <Route path={'/login'} render={() => (<Redirect to={'/'}/>)}/>
                 <Route path={'/project-team'} component={ProjectTeamFormTablePage}/>
+                <Route path={'/attendance'} component={AttendanceViewAndEdit}/>
                 <Route path={'/baseline'} component={BaselineTablePage}/>
+                <Route path={'/user-type'} component={UserTypePage}/>
                 <Route component={NotFoundPage}/>
             </Switch>
             <Switch>
